@@ -29,6 +29,13 @@ $ export FLASK_ENV=development
 $ flask run
 ```
 
+for Windows:
+```
+set FLASK_APP=app.py
+set FLASK_ENV=development
+flask run
+```
+
 This will start the Flask application on `http://localhost:5000`.
 
 ### Using the application
