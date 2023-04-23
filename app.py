@@ -41,7 +41,6 @@ def ocr():
     # Draw bounding boxes around recognized text
     draw = ImageDraw.Draw(image)
     boxes = pytesseract.image_to_boxes(image)
-    print(boxes)
     font = ImageFont.truetype("static/MSMINCHO.TTF", size=30)
     for b in boxes.splitlines():
         b = b.split(' ')
