@@ -3,8 +3,11 @@ from flask import Flask, render_template, request
 from torchvision import models, transforms
 import torch
 from torchvision.models import ResNet18_Weights
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 import json
+import pytesseract
+import cv2
+import numpy as np
 
 def get_class_name(label):
     with open('labels.json') as f:
@@ -17,12 +20,50 @@ app = Flask(__name__)
 
 # Define the home page route
 @app.route('/')
+def menu():
+    return render_template('menu.html')
+
+@app.route('/ocr_menu')
+def ocr_menu():
+    return render_template('ocr.html')
+
+@app.route('/ocr', methods=['POST'])
+def ocr():
+     # Check if file was uploaded
+    if 'file' not in request.files:
+        return 'No image uploaded'
+    
+    # Read image file and perform OCR
+    file = request.files['file']
+    image = Image.open(file)
+    text = pytesseract.image_to_string(image)
+    
+    # Draw bounding boxes around recognized text
+    draw = ImageDraw.Draw(image)
+    boxes = pytesseract.image_to_boxes(image)
+    print(boxes)
+    font = ImageFont.truetype("static/MSMINCHO.TTF", size=30)
+    for b in boxes.splitlines():
+        b = b.split(' ')
+        draw.rectangle(((int(b[1]), image.height - int(b[2])),
+                       (int(b[3]), image.height - int(b[4]))),
+                       outline='green', width=3)
+        draw.text((int(b[1]), image.height - int(b[2]) - 15), b[0], fill=(255,0,0), font=font, stroke_width=2)
+    
+    # Save the modified image to a temporary file
+    temp_file = 'static/temp.jpg'
+    image.save(temp_file)
+    
+    # Render the results page with the recognized text and image
+    return render_template('ocr_results.html', ocr_text=text, image=temp_file)
+
+@app.route('/home')
 def home():
     return render_template('home.html')
 
 # Define the image processing route
-@app.route('/process', methods=['POST'])
-def process():
+@app.route('/classify', methods=['POST'])
+def classify():
     # Load the PyTorch model
     model = models.resnet18(weights=ResNet18_Weights.DEFAULT)
 
@@ -57,3 +98,4 @@ def process():
 # Define the main function
 if __name__ == '__main__':
     app.run(debug=True)
+

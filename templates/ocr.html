@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>OCR</title>
+	<style>
+		body {
+			background-color: #f2f2f2;
+			font-family: Arial, sans-serif;
+			font-size: 16px;
+			line-height: 1.6;
+			margin: 0;
+			padding: 0;
+		}
+		
+		.container {
+			max-width: 1000px;
+			margin: 0 auto;
+			padding: 50px;
+			text-align: center;
+		}
+		
+		h1 {
+			font-size: 48px;
+			font-weight: 700;
+			margin-bottom: 20px;
+		}
+		
+		p {
+			font-size: 24px;
+			margin-bottom: 30px;
+		}
+		
+		input[type=file] {
+			display: block;
+			margin: 20px auto;
+		}
+		
+		button {
+			background-color: #4CAF50;
+			border: none;
+			color: white;
+			padding: 20px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 24px;
+			margin: 10px;
+			cursor: pointer;
+			border-radius: 8px;
+		}
+		
+		button:hover {
+			background-color: #3e8e41;
+		}
+		
+		#output {
+			margin-top: 50px;
+		}
+		
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>OCR</h1>
+		<p>Please upload an image to perform OCR:</p>
+		<form method="post" enctype="multipart/form-data" action="{{ url_for('ocr') }}">
+			<input type="file" name="file" accept="image/*" required>
+			<button type="submit">Submit</button>
+		</form>
+	</div>
+</body>
+</html>

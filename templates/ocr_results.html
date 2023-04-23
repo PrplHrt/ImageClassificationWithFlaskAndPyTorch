@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OCR Results</title>
+</head>
+<body>
+    <h2>OCR Results</h2>
+    <p>The OCR process has extracted the following text:</p>
+    <p>{{ ocr_text }}</p>
+    <p>The OCR process has identified the following bounding boxes:</p>
+    <img src="{{ image }}" alt="OCR result image"><br><br>
+    <form action="{{ url_for('ocr_menu') }}" method="get">
+        <button type="submit">Back to OCR Menu</button>
+    </form>
+</body>
+</html>
